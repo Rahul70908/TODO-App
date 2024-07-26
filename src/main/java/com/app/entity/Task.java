@@ -1,7 +1,6 @@
 package com.app.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,22 +12,28 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
-public class Todo {
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id")
     private Long id;
 
+    @Column(name = "task_name", nullable = false)
+    private String taskName;
+
+    @Column(name = "task_description")
     private String description;
 
+    @Column(name = "task_status")
+    private String status;
+
     @CreationTimestamp
-    private Timestamp createdAt;
+    @Column(name = "created_on")
+    private Timestamp createdOn;
 
     @UpdateTimestamp
-    private Timestamp modifiedAt;
-
-    @Column(name = "isComplete")
-    private Boolean complete;
+    @Column(name = "modified_on")
+    private String modifiedOn;
 }

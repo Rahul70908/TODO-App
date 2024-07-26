@@ -1,5 +1,7 @@
 server:
   port: 8080
+  servlet:
+    context-path: /todo
   error:
     include-binding-errors: ALWAYS
     include-message: ALWAYS
@@ -9,6 +11,13 @@ server:
 spring:
   application:
     name: TODO App
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  threads:
+    virtual:
+      enabled: true
 
   datasource:
     url: jdbc:h2:mem:todoDb
