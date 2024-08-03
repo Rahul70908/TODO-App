@@ -1,32 +1,18 @@
 package com.app.exception.handler;
 
 import com.app.exception.TodoException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.ArrayList;
-import java.util.List;
+@ControllerAdvice
+public class GlobalExceptionHandler {
 
-@Component
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex,
-                                                                  @NonNull HttpHeaders headers,
-                                                                  @NonNull HttpStatusCode status,
-                                                                  @NonNull WebRequest request) {
-        List<String> errors = new ArrayList<>();
-        ex.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
-                .forEach(errors::add);
-        return ResponseEntity.badRequest().body(errors);
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public String handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ext) {
+       return "redirect:/task/getAll";
     }
 
     @ExceptionHandler(value = TodoException.class)

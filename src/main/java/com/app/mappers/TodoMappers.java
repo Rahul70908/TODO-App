@@ -14,4 +14,7 @@ public interface TodoMappers {
     @Mapping(target = "createdOn", ignore = true)
     @Mapping(target = "status", source = "taskStatus")
     Task mapTaskDtoToEntity(TaskDto taskDto);
+
+    @Mapping(target = "taskStatus", source = "status")
+    TaskDto mapToTask(Task task);
 }

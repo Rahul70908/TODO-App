@@ -1,28 +1,37 @@
 package com.app.controller;
 
 import com.app.dto.TaskDto;
-import com.app.entity.Task;
 import com.app.service.TaskService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping(path = "/task")
 @RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
 
+    @SneakyThrows
     @PostMapping(path = "/create")
-    public ResponseEntity<Task> createTask(@Valid @RequestBody TaskDto taskDto) {
-        return ResponseEntity.ok(taskService.createTask(taskDto));
+    public void createTask(@Valid @ModelAttribute(name = "task") TaskDto taskDto,
+                           HttpServletResponse response) {
+        taskService.createTask(taskDto);
+        response.sendRedirect("/todo/task/getAll");
     }
 
-    @PutMapping(path = "/update")
-    public ResponseEntity<Task> updateTask(@Valid @RequestBody TaskDto taskDto) {
-        return ResponseEntity.ok(taskService.updateTask(taskDto));
+    @SneakyThrows
+    @PutMapping(path = "/update/{id}")
+    public void updateTask(@PathVariable Long id, @Valid @ModelAttribute("task") TaskDto taskDto,
+                           HttpServletResponse response) {
+        taskService.updateTask(taskDto);
+        response.sendRedirect("/todo/task/getAll");
     }
 
     @DeleteMapping(path = "/delete")
@@ -31,8 +40,13 @@ public class TaskController {
     }
 
     @GetMapping(path = "/get/{id}")
-    public ResponseEntity<Task> getTask(@Valid @PathVariable(name = "id") Long taskId) {
+    public ResponseEntity<TaskDto> getTask(@Valid @PathVariable(name = "id") Long taskId) {
         return ResponseEntity.ok(taskService.getTask(taskId));
     }
 
+    @GetMapping(path = "/getAll")
+    public String getTask(Model model) {
+        model.addAttribute("tasks", taskService.getAllTask());
+        return "task";
+    }
 }

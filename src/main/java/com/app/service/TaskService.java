@@ -8,6 +8,8 @@ import com.app.repo.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TaskService {
@@ -39,8 +41,13 @@ public class TaskService {
         return "Task deleted successfully";
     }
 
-    public Task getTask(Long id) {
-        return taskRepository.findById(id)
+    public TaskDto getTask(Long id) {
+        Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TodoException("Task not found"));
+        return todoMappers.mapToTask(task);
+    }
+
+    public List<Task> getAllTask() {
+        return taskRepository.findAll();
     }
 }

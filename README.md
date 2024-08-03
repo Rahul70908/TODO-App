@@ -10,4 +10,5 @@ This is a Basic TODO Application.
 ## [1.0.0]
 
 - Initial Implementation
-- H2 Database Support
+- Docker Compose Support
+- Mysql Database Support
